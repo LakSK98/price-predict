@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Description Predictor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.15.6/antd.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>House Description Predictor</h1>
+        <form id="prediction-form" class="ant-form ant-form-vertical">
+            <div class="ant-form-item">
+                <label for="description" class="ant-form-item-label">Description:</label>
+                <div class="ant-form-item-control">
+                    <textarea id="description" name="description" class="ant-input" required></textarea>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <label for="house_size" class="ant-form-item-label">House Size:</label>
+                <div class="ant-form-item-control">
+                    <input type="number" id="house_size" name="house_size" class="ant-input" required>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <label for="bedrooms" class="ant-form-item-label">Bedrooms:</label>
+                <div class="ant-form-item-control">
+                    <input type="number" id="bedrooms" name="bedrooms" class="ant-input" required>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <label for="bathrooms" class="ant-form-item-label">Bathrooms:</label>
+                <div class="ant-form-item-control">
+                    <input type="number" id="bathrooms" name="bathrooms" class="ant-input" required>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <label for="land_size" class="ant-form-item-label">Land Size:</label>
+                <div class="ant-form-item-control">
+                    <input type="number" id="land_size" name="land_size" class="ant-input" required>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <label for="type" class="ant-form-item-label">Type:</label>
+                <div class="ant-form-item-control">
+                    <input type="text" id="type" name="type" class="ant-input" required>
+                </div>
+            </div>
+            <div class="ant-form-item">
+                <div class="ant-form-item-control">
+                    <button type="submit" class="ant-btn ant-btn-primary">Predict</button>
+                </div>
+            </div>
+        </form>
+        <div id="prediction-result" class="ant-typography"></div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#prediction-form').on('submit', function(event) {
+                event.preventDefault();
+                let formData = {
+                    description: $('#description').val(),
+                    house_size: $('#house_size').val(),
+                    bedrooms: $('#bedrooms').val(),
+                    bathrooms: $('#bathrooms').val(),
+                    land_size: $('#land_size').val(),
+                    type: $('#type').val()
+                };
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(data) {
+                        $('#prediction-result').html('<h2>Prediction: ' + data.Prediction + '</h2>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
