@@ -43,7 +43,10 @@
             <div class="ant-form-item">
                 <label for="type" class="ant-form-item-label">Type:</label>
                 <div class="ant-form-item-control">
-                    <input type="text" id="type" name="type" class="ant-input" required>
+                    <select id="type" name="type" class="ant-input" required>
+                        <option value="0">Sale</option>
+                        <option value="1">Rental</option>
+                    </select>
                 </div>
             </div>
             <div class="ant-form-item">
@@ -72,7 +75,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(data) {
-                        $('#prediction-result').html('<h2>Prediction: ' + data.Prediction + '</h2>');
+                        $('#prediction-result').html('<h2 id="prediction-result" >Prediction: ' + data.Prediction + '</h2>');
                     }
                 });
             });

@@ -2,9 +2,13 @@ from flask import Flask, request, jsonify, render_template
 import pickle
 from flask_cors import CORS
 from features_extraction import extract_features
+from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 CORS(app)
+
+def inverse_transform(scaled_value, min_value, max_value):
+    return scaled_value * (max_value - min_value) + min_value
 
 with open("./model/real_state_model.pkl", "rb") as file:
     loaded_clf = pickle.load(file)
@@ -34,7 +38,8 @@ def predict():
                 description, house_size, bedrooms, bathrooms, land_size, type
             )
             prediction = loaded_clf.predict(extracted_features)
-            return jsonify({"Prediction": str(prediction[0])}), 200
+            original_price = inverse_transform(prediction[0], 38000.0, 180000000.0)
+            return jsonify({"Prediction": f'{str(original_price)} LKR'}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
     else:
